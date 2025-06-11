@@ -1,4 +1,4 @@
-const { db } = require('../../lib/firebase.js');
+const { db } = require('../lib/firebase.js');
 
 module.exports = async (req, res) => {
   if (req.method !== 'POST') {
