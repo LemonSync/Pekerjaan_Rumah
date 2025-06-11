@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Pengingat Tugas Sekolah</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <h1>📘 Pengingat Tugas</h1>
+  <p id="besok-hari"></p>
+  <h2>Tugas yang Harus Dikumpulkan Besok:</h2>
+  <ul id="daftar-tugas"></ul>
+
+  <script>
+    const hariDalamMinggu = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+    const besok = new Date();
+    besok.setDate(besok.getDate() + 1);
+    document.getElementById('besok-hari').textContent = `Besok adalah hari ${hariDalamMinggu[besok.getDay()]}, ${besok.toLocaleDateString('id-ID')}`;
+
+    fetch('/api/get-tomorrow')
+      .then(res => res.json())
+      .then(data => {
+        const daftar = document.getElementById('daftar-tugas');
+        if (data.length === 0) {
+          daftar.innerHTML = '<li>Tidak ada tugas untuk besok ✅</li>';
+        } else {
+          data.forEach(tugas => {
+            const li = document.createElement('li');
+            li.textContent = `${tugas.subject}: ${tugas.task}`;
+            daftar.appendChild(li);
+          });
+        }
+      })
+      .catch(() => {
+        document.getElementById('daftar-tugas').innerHTML = '<li>Gagal memuat data</li>';
+      });
+  </script>
+</body>
+</html>
