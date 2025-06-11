@@ -1,7 +1,7 @@
 {
   "rewrites": [
-    { "source": "/", "destination": "/pages/index.html" },
-    { "source": "/add", "destination": "/pages/add.html" }
+    { "source": "/", "destination": "/public/index.html" },
+    { "source": "/add", "destination": "/public/add.html" }
   ],
   "cleanUrls": true,
   "trailingSlash": false
