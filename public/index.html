@@ -18,7 +18,7 @@
     besok.setDate(besok.getDate() + 1);
     document.getElementById('besok-hari').textContent = `Besok adalah hari ${hariDalamMinggu[besok.getDay()]}, ${besok.toLocaleDateString('id-ID')}`;
 
-    fetch('/api/get-tomorrow')
+    fetch('https://lemon-pr.vercel.app/api/get-tomorrow')
       .then(res => res.json())
       .then(data => {
         const daftar = document.getElementById('daftar-tugas');
