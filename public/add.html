@@ -42,7 +42,7 @@
         token
       };
 
-      const res = await fetch('/api/add-task', {
+      const res = await fetch('https://lemon-pr.vercel.app/api/add-task', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
