@@ -30,15 +30,17 @@
         const container = document.getElementById("tugas-container");
         container.innerHTML = "";
 
-        if (Object.keys(data).length === 0) {
-          container.innerHTML = `<p>✅ Tidak ada tugas yang harus dikumpulkan besok.</p>`;
+        const tugasList = Object.values(data);
+
+        if (tugasList.length === 0) {
+          container.innerHTML = `<p>Tidak ada tugas untuk besok.</p>`;
         } else {
-          Object.values(data).forEach(tugas => {
+          tugasList.forEach((tugas, index) => {
             const div = document.createElement("div");
             div.className = "tugas-item";
             div.innerHTML = `
-              <strong>${tugas.namaTugas || "Tanpa Nama"}:</strong><br>
-              &nbsp;&nbsp;&bull; Deskripsi: ${tugas.deskripsi || "-"}
+              <p><strong>${index + 1}. ${tugas.namaTugas || "Tanpa Nama Tugas"}</strong></p>
+              <p>&nbsp;&nbsp;&bull; Deskripsi: ${tugas.deskripsi || "-"}</p><br>
             `;
             container.appendChild(div);
           });
