@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Pengingat Tugas</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Tugas untuk Besok (<span id="besok"></span>)</h1>
+    <ul id="daftar-tugas"></ul>
+  </div>
+
+  <script>
+    const hari = ["Minggu","Senin","Selasa","Rabu","Kamis","Jumat","Sabtu"];
+    const besok = new Date();
+    besok.setDate(besok.getDate() + 1);
+    const namaHari = hari[besok.getDay()];
+    document.getElementById("besok").innerText = namaHari;
+
+    fetch("/api/tugas")
+      .then(res => res.json())
+      .then(data => {
+        const tugas = data[namaHari] || {};
+        const daftar = document.getElementById("daftar-tugas");
+        Object.values(tugas).forEach(item => {
+          const li = document.createElement("li");
+          li.textContent = item;
+          daftar.appendChild(li);
+        });
+      });
+  </script>
+</body>
+</html>
