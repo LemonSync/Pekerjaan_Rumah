@@ -17,9 +17,8 @@ const serviceAccount = {
 if (!admin.apps.length) {
   admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
-    databaseURL: "https://lemon-pr-default-rtdb.asia-southeast1.firebasedatabase.app"
+    databaseURL: "https://lemon-pr-default-rtdb.asia-southeast1.firebasedatabase.app/",
   });
 }
 
-const db = admin.database();
-module.exports = { db };
+module.exports = admin;
