@@ -1,34 +1,27 @@
 <!DOCTYPE html>
-<html lang="id">
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Pengingat Tugas</title>
-  <link rel="stylesheet" href="style.css">
+  <title>Pengingat Tugas Besok</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="container">
-    <h1>Tugas untuk Besok (<span id="besok"></span>)</h1>
-    <ul id="daftar-tugas"></ul>
-  </div>
+  <h1>Tugas untuk Besok</h1>
+  <ul id="tugas-list"></ul>
 
   <script>
-    const hari = ["Minggu","Senin","Selasa","Rabu","Kamis","Jumat","Sabtu"];
-    const besok = new Date();
-    besok.setDate(besok.getDate() + 1);
-    const namaHari = hari[besok.getDay()];
-    document.getElementById("besok").innerText = namaHari;
-
-    fetch("/api/tugas")
+    fetch('/api/tugas')
       .then(res => res.json())
       .then(data => {
-        const tugas = data[namaHari] || {};
-        const daftar = document.getElementById("daftar-tugas");
-        Object.values(tugas).forEach(item => {
-          const li = document.createElement("li");
-          li.textContent = item;
-          daftar.appendChild(li);
-        });
+        const list = document.getElementById("tugas-list");
+        if (Object.keys(data).length === 0) {
+          list.innerHTML = "<li>Tidak ada tugas</li>";
+        } else {
+          Object.values(data).forEach(tugas => {
+            const li = document.createElement("li");
+            li.textContent = tugas;
+            list.appendChild(li);
+          });
+        }
       });
   </script>
 </body>
