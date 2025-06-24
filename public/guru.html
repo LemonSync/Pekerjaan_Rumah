@@ -5,35 +5,44 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <h1>Tambah Tugas Baru</h1>
   <form id="form">
-    <label>Tanggal (YYYY-MM-DD): <input type="date" id="tanggal" required /></label><br><br>
-    <label>Isi Tugas: <input type="text" id="tugas" required /></label><br><br>
-    <button type="submit">Tambah</button>
+    <h1>Tambah Tugas Baru</h1>
+    <label for="date">Pilih Tanggal:</label>
+    <input type="date" id="date" name="date" required>
+
+    <label for="namaTugas">Nama Tugas:</label>
+    <input type="text" id="namaTugas" name="namaTugas" required>
+
+    <label for="textArea">Deskripsi:</label>
+    <textarea name="textArea" id="textArea" rows="8" cols="40" required></textarea>
+
+    <button type="submit">Kirim</button>
+    <p id="status"></p>
   </form>
-  <p id="status"></p>
 
   <script>
-  const url = new URL(window.location.href);
-const token = url.searchParams.get("token");
-if (token !== "gurukelas123") {
-  document.body.innerHTML = "<h2>Akses ditolak</h2>";
-}
-  
+    const url = new URL(window.location.href);
+    const token = url.searchParams.get("token");
+    if (token !== "gurukelas123") {
+      document.body.innerHTML = "<h2>Akses ditolak</h2>";
+    }
+
     document.getElementById("form").onsubmit = async (e) => {
       e.preventDefault();
-      const tanggal = document.getElementById("tanggal").value;
-      const tugas = document.getElementById("tugas").value;
+
+      const date = document.getElementById("date").value;
+      const namaTugas = document.getElementById("namaTugas").value;
+      const deskripsi = document.getElementById("textArea").value;
 
       const res = await fetch("/api/tugas", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ tanggal, tugas })
+        body: JSON.stringify({ date, namaTugas, deskripsi })
       });
 
       document.getElementById("status").textContent = res.ok
-        ? "Tugas berhasil ditambahkan!"
-        : "Gagal menambahkan tugas!";
+        ? "✅ Tugas berhasil ditambahkan!"
+        : "❌ Gagal menambahkan tugas!";
     };
   </script>
 </body>
