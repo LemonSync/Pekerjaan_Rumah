@@ -16,19 +16,33 @@ form {
 }
 
 input {
+  background: #E6E6E6;
   padding: 0.5rem;
   margin-top: 0.3rem;
-  width: 100%;
   max-width: 400px;
+  border: 1px solid #000000;
+}
+
+textarea {
+  background: #E6E6E6;
+  padding: 0.5rem;
+  margin-top: 0.3rem;
+  max-width: 400px;
+  border: 1px solid #000000;
+  width: 90%;
+}
+
+label {
+  font-weight: bold;
+  display: grid;
+  margin-top: 1em;
 }
 
 button {
-  padding: 0.5rem 1rem;
-  background: #4caf50;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  margin-top: 1rem;
+  display: grid;
+  width: 5em;
+  height: 1.7em;
+  
 }
 
 ul {
