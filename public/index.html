@@ -1,27 +1,52 @@
 <!DOCTYPE html>
-<html>
+<html lang="id">
 <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Pengingat Tugas Besok</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <h1>Tugas untuk Besok</h1>
-  <ul id="tugas-list"></ul>
+  <h1 id="judul">📅 Tugas yang harus dikumpulkan pada ...</h1>
+  <div id="tugas-container"></div>
 
   <script>
+    const besok = new Date();
+    besok.setDate(besok.getDate() + 1);
+
+    const yyyy = besok.getFullYear();
+    const mm = String(besok.getMonth() + 1).padStart(2, '0');
+    const dd = String(besok.getDate()).padStart(2, '0');
+
+    const tanggalBesokKey = `${yyyy}-${mm}-${dd}`;
+    const tanggalBesokTampil = `${dd}/${mm}/${String(yyyy).slice(-2)}`;
+
+    document.getElementById("judul").textContent =
+      `📅 Tugas yang harus dikumpulkan pada ${tanggalBesokTampil}`;
+
     fetch('/api/tugas')
       .then(res => res.json())
       .then(data => {
-        const list = document.getElementById("tugas-list");
+        const container = document.getElementById("tugas-container");
+        container.innerHTML = "";
+
         if (Object.keys(data).length === 0) {
-          list.innerHTML = "<li>Tidak ada tugas</li>";
+          container.innerHTML = `<p>✅ Tidak ada tugas yang harus dikumpulkan besok.</p>`;
         } else {
           Object.values(data).forEach(tugas => {
-            const li = document.createElement("li");
-            li.textContent = tugas;
-            list.appendChild(li);
+            const div = document.createElement("div");
+            div.className = "tugas-item";
+            div.innerHTML = `
+              <strong>${tugas.namaTugas || "Tanpa Nama"}:</strong><br>
+              &nbsp;&nbsp;&bull; Deskripsi: ${tugas.deskripsi || "-"}
+            `;
+            container.appendChild(div);
           });
         }
+      })
+      .catch(() => {
+        document.getElementById("tugas-container").innerHTML =
+          "<p>❌ Gagal memuat data tugas.</p>";
       });
   </script>
 </body>
