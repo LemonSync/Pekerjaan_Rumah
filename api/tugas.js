@@ -1,19 +1,23 @@
-const { db } = require("../firebase");
+const admin = require("../../firebase");
 
 module.exports = async (req, res) => {
-  const ref = db.ref("jadwal");
+  const db = admin.database();
+  const ref = db.ref("tugas");
+
+  if (req.method === "POST") {
+    const { tanggal, tugas } = req.body;
+    await ref.child(tanggal).push(tugas);
+    return res.status(200).json({ success: true });
+  }
 
   if (req.method === "GET") {
-    ref.once("value", (snapshot) => {
-      res.status(200).json(snapshot.val() || {});
-    });
-  } else if (req.method === "POST") {
-    const { hari, tugas } = req.body;
-    if (!hari || !tugas) return res.status(400).send("Data tidak lengkap");
+    const besok = new Date();
+    besok.setDate(besok.getDate() + 1);
+    const tanggalBesok = besok.toISOString().split("T")[0];
 
-    await ref.child(hari).push(tugas);
-    res.status(200).json({ message: "Tugas ditambahkan" });
-  } else {
-    res.status(405).end();
+    const snapshot = await ref.child(tanggalBesok).once("value");
+    return res.status(200).json(snapshot.val() || {});
   }
+
+  res.status(405).end();
 };
