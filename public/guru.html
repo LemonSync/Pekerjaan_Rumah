@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Tambah Tugas</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <script>
+    const token = new URLSearchParams(window.location.search).get("token");
+    if (token !== "rahasia") {
+      document.body.innerHTML = "<h1>Akses ditolak</h1>";
+      throw new Error("Unauthorized");
+    }
+  </script>
+
+  <h1>Tambah Tugas Baru</h1>
+  <form id="form">
+    <label>Tanggal (YYYY-MM-DD): <input type="date" id="tanggal" required /></label><br><br>
+    <label>Isi Tugas: <input type="text" id="tugas" required /></label><br><br>
+    <button type="submit">Tambah</button>
+  </form>
+  <p id="status"></p>
+
+  <script>
+    document.getElementById("form").onsubmit = async (e) => {
+      e.preventDefault();
+      const tanggal = document.getElementById("tanggal").value;
+      const tugas = document.getElementById("tugas").value;
+
+      const res = await fetch("/api/tugas", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ tanggal, tugas })
+      });
+
+      document.getElementById("status").textContent = res.ok
+        ? "Tugas berhasil ditambahkan!"
+        : "Gagal menambahkan tugas!";
+    };
+  </script>
+</body>
+</html>
