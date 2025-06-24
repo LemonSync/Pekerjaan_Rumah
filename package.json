@@ -1,0 +1,6 @@
+{
+  "type": "commonjs",
+  "dependencies": {
+    "firebase-admin": "^11.11.0"
+  }
+}
