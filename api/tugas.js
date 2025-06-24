@@ -1,4 +1,4 @@
-const admin = require("../../firebase");
+const admin = require("../firebase");
 
 module.exports = async (req, res) => {
   const db = admin.database();
