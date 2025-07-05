@@ -1,51 +1,55 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <title>Pengingat Tugas Besok</title>
+  <meta charset="UTF-8">
+  <title>Tambah Tugas</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <h1 id="judul">📅 Tugas yang harus dikumpulkan pada ...</h1>
-  <div id="tugas-container"></div>
+  <form id="form">
+    <h1>Tambah Tugas Baru</h1>
+
+    <label for="date">Pilih Tanggal:</label>
+    <input type="date" id="date" name="date" required>
+
+    <label for="namaTugas">Nama Tugas:</label>
+    <input type="text" id="namaTugas" name="namaTugas" required>
+
+    <label for="textArea">Deskripsi:</label>
+    <textarea name="textArea" id="textArea" rows="6" cols="40" required></textarea>
+
+    <button type="submit">Kirim</button>
+    <p id="status"></p>
+  </form>
 
   <script>
-    const besok = new Date();
-    besok.setDate(besok.getDate() + 1);
-    const yyyy = besok.getFullYear();
-    const mm = String(besok.getMonth() + 1).padStart(2, '0');
-    const dd = String(besok.getDate()).padStart(2, '0');
-    const tanggalBesokKey = `${yyyy}-${mm}-${dd}`;
-    const tanggalTampil = `${dd}/${mm}/${String(yyyy).slice(-2)}`;
+    const url = new URL(window.location.href);
+    const token = url.searchParams.get("token");
 
-    document.getElementById("judul").textContent =
-      `📅 Tugas yang harus dikumpulkan pada ${tanggalTampil}`;
+    if (token !== "gurukelas123") {
+      document.body.innerHTML = "<h2>Akses ditolak</h2>";
+    }
 
-    fetch('/api/tugas')
-      .then(res => res.json())
-      .then(data => {
-        const container = document.getElementById("tugas-container");
-        container.innerHTML = "";
+    document.getElementById("form").onsubmit = async (e) => {
+      e.preventDefault();
 
-        const tugasList = Object.values(data);
-        if (tugasList.length === 0) {
-          container.innerHTML = `<p>Tidak ada tugas untuk besok.</p>`;
-        } else {
-          tugasList.forEach((tugas, index) => {
-            const div = document.createElement("div");
-            div.className = "tugas-item";
-            div.innerHTML = `
-              <p><strong>${index + 1}. ${tugas.namaTugas || "Tanpa Nama Tugas"}</strong></p>
-              <p>&nbsp;&nbsp;&bull; Deskripsi: ${tugas.deskripsi || "-"}</p><br>
-            `;
-            container.appendChild(div);
-          });
-        }
-      })
-      .catch(() => {
-        document.getElementById("tugas-container").innerHTML =
-          "<p>❌ Gagal memuat data tugas.</p>";
+      const date = document.getElementById("date").value;
+      const namaTugas = document.getElementById("namaTugas").value;
+      const deskripsi = document.getElementById("textArea").value;
+
+      const res = await fetch("/api/tugas", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify({ date, namaTugas, deskripsi })
       });
+
+      document.getElementById("status").textContent = res.ok
+        ? "✅ Tugas berhasil ditambahkan!"
+        : "❌ Gagal menambahkan tugas!";
+    };
   </script>
 </body>
 </html>
