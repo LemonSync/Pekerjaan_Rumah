@@ -36,7 +36,7 @@
             div.className = "tugas-item";
             div.innerHTML = `
               <p><strong>${index + 1}. ${tugas.namaTugas || "Tanpa Nama Tugas"}</strong></p>
-              <p>&nbsp;&nbsp;• Deskripsi: ${tugas.deskripsi || "-"}</p><br>
+              <p>&nbsp;&nbsp;&bull; Deskripsi: ${tugas.deskripsi || "-"}</p><br>
             `;
             container.appendChild(div);
           });
