@@ -2,6 +2,7 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Pengingat Tugas Besok</title>
   <link rel="stylesheet" href="style.css" />
 </head>
@@ -12,14 +13,16 @@
   <script>
     const besok = new Date();
     besok.setDate(besok.getDate() + 1);
+
     const yyyy = besok.getFullYear();
     const mm = String(besok.getMonth() + 1).padStart(2, '0');
     const dd = String(besok.getDate()).padStart(2, '0');
+
     const tanggalBesokKey = `${yyyy}-${mm}-${dd}`;
-    const tanggalTampil = `${dd}/${mm}/${String(yyyy).slice(-2)}`;
+    const tanggalBesokTampil = `${dd}/${mm}/${String(yyyy).slice(-2)}`;
 
     document.getElementById("judul").textContent =
-      `📅 Tugas yang harus dikumpulkan pada ${tanggalTampil}`;
+      `📅 Tugas yang harus dikumpulkan pada ${tanggalBesokTampil}`;
 
     fetch('/api/tugas')
       .then(res => res.json())
@@ -28,6 +31,7 @@
         container.innerHTML = "";
 
         const tugasList = Object.values(data);
+
         if (tugasList.length === 0) {
           container.innerHTML = `<p>Tidak ada tugas untuk besok.</p>`;
         } else {
